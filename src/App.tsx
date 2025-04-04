@@ -22,7 +22,7 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            Whispers of the Soul
+            Fictitious Scribbles
           </motion.h1>
           <motion.p 
             className="text-xl md:text-2xl max-w-2xl mx-auto text-gray-300 italic"
