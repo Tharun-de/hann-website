@@ -59,12 +59,8 @@ function WritingSection({ id, title, icon, writings, accent }: WritingSectionPro
             {writing.title && (
               <h3 className="text-2xl font-serif mb-4">{writing.title}</h3>
             )}
-            <div className="prose prose-invert max-w-none">
-              {writing.content.split('\n\n').map((paragraph, i) => (
-                <p key={i} className="mb-4 leading-relaxed">
-                  {paragraph}
-                </p>
-              ))}
+            <div className="prose prose-invert max-w-none whitespace-pre-line leading-relaxed">
+              {writing.content}
             </div>
           </motion.article>
         ))}

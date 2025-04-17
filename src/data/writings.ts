@@ -8,28 +8,30 @@ Love - the cause of all hurt. If you don't love, you can't be hurt. But if you a
   cosmicSerendipity: {
     title: "Cosmic Serendipity",
     content: `As the setting sun paints the sky pink,
-I blow tenderly on my diary to dry the ink
-Beautiful phrases drip down my pen 
-As I reminisce the glimpses of heaven 
-I look at the clouds and ask myself
+I blow tenderly on my diary to dry the ink.
+Beautiful phrases drip down my pen,
+As I reminisce the glimpses of heaven.
+I look at the clouds and ask myself,
 Is there anything more beautiful than this?
-My skin replies, "His touch, my darling"
-"The touch that glides so tenderly"
+My skin replies, "His touch, my darling,
+The touch that glides so tenderly."
 
-Solitude surrounds the dark night
-As the headlights of his car glow bright 
-The midnight skies come alive 
-As the love equations we derive
-I look at the moon and ask myself
+Solitude surrounds the dark night,
+As the headlights of his car glow bright.
+The midnight skies come alive,
+As the love equations we derive.
+I look at the moon and ask myself,
 Is there anything more beautiful than this?
-My eyes reply, "His smile, my darling"
-"The smile that intoxicates you so warmly"
+My eyes reply, "His smile, my darling,
+The smile that intoxicates you so warmly."
 
-A love so theoretical, a chemistry so rhetorical
-An obsession so twisted; an addiction so hardly resisted
+A love so theoretical,
+A chemistry so rhetorical…
+An obsession so twisted;
+An addiction so hardly resisted…
 Falling, drowning and fiending...
-In this cosmic serendipity, 
-I find hope and its meaning`
+In this cosmic serendipity,
+I find hope and its meaning…`
   },
   morphedLove: {
     title: "Morphed Love",
