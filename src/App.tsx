@@ -110,7 +110,7 @@ function App() {
             — Albert Camus
           </p>
           <p className="text-sm text-gray-500">
-            Written by Hannah
+            Penned by Yancey
           </p>
         </div>
       </footer>
