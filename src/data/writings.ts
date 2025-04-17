@@ -127,7 +127,7 @@ This little soul of mine, for you, I unsheathe`
   fireAndIce: {
     title: "The Song of Fire and Ice",
     content: `They don't see what I see when I look into your eyes
-The fire inside you burnS my soul like a surprise
+The fire inside you burns my soul like a surprise
 
 Always the poet, but never the muse
 But under your gaze, I turn into poetry

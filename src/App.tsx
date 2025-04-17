@@ -1,5 +1,5 @@
 import React from 'react';
-import { Book, Feather, Heart, Moon, Siren as Fire, Star } from 'lucide-react';
+import { Feather, Heart, Siren as Fire, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 import WritingSection from './components/WritingSection';
 import { writings } from './data/writings';
@@ -104,10 +104,13 @@ function App() {
       {/* Footer */}
       <footer className="bg-gray-900 border-t border-gray-800 py-8">
         <div className="max-w-4xl mx-auto px-4 text-center text-gray-400">
-          <p className="font-serif italic">
+          <p className="font-serif italic mb-4">
             "In the depth of winter, I finally learned that within me there lay an invincible summer."
             <br />
             — Albert Camus
+          </p>
+          <p className="text-sm text-gray-500">
+            Written by Hannah
           </p>
         </div>
       </footer>
