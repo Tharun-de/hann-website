@@ -1,5 +1,5 @@
 import React from 'react';
-import { Feather, Heart, Siren as Fire, Star } from 'lucide-react';
+import { Feather, Heart, Siren as Fire, Star, Sparkles, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import WritingSection from './components/WritingSection';
 import { writings } from './data/writings';
@@ -38,29 +38,45 @@ function App() {
       {/* Navigation */}
       <nav className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-center space-x-8">
-            <a href="#love" className="flex items-center space-x-2 hover:text-rose-400 transition-colors">
-              <Heart size={18} />
-              <span>Love & Pain</span>
-            </a>
-            <a href="#serendipity" className="flex items-center space-x-2 hover:text-purple-400 transition-colors">
-              <Star size={18} />
-              <span>Serendipity</span>
-            </a>
-            <a href="#desire" className="flex items-center space-x-2 hover:text-red-400 transition-colors">
-              <Fire size={18} />
-              <span>Desire</span>
-            </a>
-            <a href="#power" className="flex items-center space-x-2 hover:text-blue-400 transition-colors">
-              <Feather size={18} />
-              <span>Power</span>
-            </a>
+          <div className="flex items-center justify-center space-x-6 flex-wrap">
+            {[
+              { href: "#reflections", text: "Reflections", icon: BookOpen, color: "emerald" },
+              { href: "#love", text: "Love & Pain", icon: Heart, color: "rose" },
+              { href: "#serendipity", text: "Serendipity", icon: Star, color: "purple" },
+              { href: "#journey", text: "Inner Journeys", icon: Sparkles, color: "amber" },
+              { href: "#desire", text: "Desire", icon: Fire, color: "red" },
+              { href: "#power", text: "Power", icon: Feather, color: "blue" },
+            ].map((item) => (
+              <a 
+                key={item.href}
+                href={item.href} 
+                className={`relative flex items-center space-x-2 hover:text-${item.color}-400 transition-colors my-1 group`}
+              >
+                <item.icon size={18} />
+                <span>{item.text}</span>
+                <motion.div
+                  className={`absolute bottom-[-2px] left-0 right-0 h-[2px] bg-${item.color}-400`}
+                  initial={{ scaleX: 0 }}
+                  whileHover={{ scaleX: 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  style={{ transformOrigin: 'left' }}
+                />
+              </a>
+            ))}
           </div>
         </div>
       </nav>
 
       {/* Content Sections */}
       <main className="max-w-4xl mx-auto px-4 py-16 space-y-32">
+        <WritingSection
+          id="reflections"
+          title="Reflections on Fiction"
+          icon={<BookOpen className="text-emerald-400" />}
+          writings={[writings.fictitiousDreams]}
+          accent="emerald"
+        />
+
         <WritingSection
           id="love"
           title="Love & Pain"
@@ -78,11 +94,18 @@ function App() {
         />
 
         <WritingSection
-          id="power"
-          title="Feminine Power"
-          icon={<Feather className="text-blue-400" />}
-          writings={[writings.femininePower]}
-          accent="blue"
+          id="journey"
+          title="Inner Journeys"
+          icon={<Sparkles className="text-amber-400" />}
+          writings={[
+            writings.ghostOfSpark,
+            writings.calmInStorm,
+            writings.loseToLove,
+            writings.redemption,
+            writings.loveAndPainWillCome,
+            writings.killingMyFlesh
+          ]}
+          accent="amber"
         />
 
         <WritingSection
@@ -95,9 +118,18 @@ function App() {
             writings.fireAndIce,
             writings.fickleHeart,
             writings.oneNight,
-            writings.unquenchedFire
+            writings.unquenchedFire,
+            writings.poisonedSanctuary
           ]}
           accent="red"
+        />
+
+        <WritingSection
+          id="power"
+          title="Feminine Power"
+          icon={<Feather className="text-blue-400" />}
+          writings={[writings.femininePower]}
+          accent="blue"
         />
       </main>
 
