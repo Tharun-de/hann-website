@@ -72,40 +72,51 @@ function WritingSection({ id, title, icon, writings, accent }: WritingSectionPro
       </motion.div>
       
       <div className="space-y-8">
-        {writings.map((writing, index) => (
-          <motion.article
-            key={index}
-            className={`p-8 rounded-lg border ${accentColors[accent]} backdrop-blur-sm overflow-hidden`} // Added overflow-hidden
-            custom={index} // Pass index for stagger between articles
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={articleVariants} 
-          >
-            {/* Stagger title within article */}
-            {writing.title && (
-              <motion.h3 
-                className="text-2xl font-serif mb-4"
-                initial="hidden"
-                animate="visible" // Use animate here since parent triggers whileInView
-                variants={articleContentVariants} 
-                transition={{ delay: 0.1 }} // Delay after card appears
-              >
-                {writing.title}
-              </motion.h3>
-            )}
-            {/* Stagger content div within article */}
-            <motion.div 
-              className="prose prose-invert max-w-none whitespace-pre-line leading-relaxed"
+        {writings.map((writing, index) => {
+          // Add a check to ensure writing is defined
+          if (!writing) {
+            console.error(`Undefined writing object found at index ${index} in section ${id}`);
+            return null; // Skip rendering this item if it's undefined
+          }
+          
+          // If writing is defined, render the article
+          return (
+            <motion.article
+              key={index}
+              className={`p-8 rounded-lg border ${accentColors[accent]} backdrop-blur-sm overflow-hidden`}
+              custom={index} 
               initial="hidden"
-              animate="visible" // Use animate here
-              variants={articleContentVariants}
-              transition={{ delay: writing.title ? 0.2 : 0.1 }} // Delay more if title exists
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={articleVariants} 
             >
-              {writing.content}
-            </motion.div>
-          </motion.article>
-        ))}
+              {/* Stagger title within article - Check again just in case */}
+              {writing.title && (
+                <motion.h3 
+                  className="text-2xl font-serif mb-4"
+                  initial="hidden"
+                  animate="visible"
+                  variants={articleContentVariants} 
+                  transition={{ delay: 0.1 }}
+                >
+                  {writing.title}
+                </motion.h3>
+              )}
+              {/* Stagger content div within article - Check again just in case */}
+              {writing.content && (
+                <motion.div 
+                  className="prose prose-invert max-w-none whitespace-pre-line leading-relaxed"
+                  initial="hidden"
+                  animate="visible"
+                  variants={articleContentVariants}
+                  transition={{ delay: writing.title ? 0.2 : 0.1 }} 
+                >
+                  {writing.content}
+                </motion.div>
+              )}
+            </motion.article>
+          );
+        })}
       </div>
     </section>
   );
