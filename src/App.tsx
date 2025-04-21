@@ -2,7 +2,89 @@ import React from 'react';
 import { Feather, Heart, Siren as Fire, Star, Sparkles, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import WritingSection from './components/WritingSection';
-import { writings } from './data/writings';
+import { allWritings as importedWritings, WritingData } from './data/writings';
+
+// Explicitly type the imported data
+const allWritings: WritingData[] = importedWritings;
+
+// Define section configurations using titles for filtering
+const sections = [
+  {
+    id: "reflections",
+    title: "Reflections on Fiction",
+    icon: BookOpen,
+    iconClass: "text-emerald-400",
+    writingTitles: ["Fictitious Dreams"],
+    accent: "emerald",
+    navClass: "hover:text-emerald-400", 
+    bgClass: "bg-emerald-400"
+  },
+  {
+    id: "love",
+    title: "Love & Pain",
+    icon: Heart,
+    iconClass: "text-rose-400",
+    writingTitles: ["Love and Pain"],
+    accent: "rose",
+    navClass: "hover:text-rose-400", 
+    bgClass: "bg-rose-400"
+  },
+  {
+    id: "serendipity",
+    title: "Cosmic Serendipity",
+    icon: Star,
+    iconClass: "text-purple-400",
+    writingTitles: ["Cosmic Serendipity", "Morphed Love"],
+    accent: "purple",
+    navClass: "hover:text-purple-400", 
+    bgClass: "bg-purple-400"
+  },
+  {
+    id: "journey",
+    title: "Inner Journeys",
+    icon: Sparkles,
+    iconClass: "text-amber-400",
+    writingTitles: [
+      "Ghost of a Spark",
+      "The Calm in the Storm",
+      "Lose You to Love Me",
+      "Redemption from Reverie",
+      "Love Will Come and So Will Pain",
+      "Killing My Flesh"
+    ],
+    accent: "amber",
+    navClass: "hover:text-amber-400", 
+    bgClass: "bg-amber-400"
+  },
+  {
+    id: "desire",
+    title: "Passion & Desire",
+    icon: Fire,
+    iconClass: "text-red-400",
+    writingTitles: [
+      "Hell's Fury",
+      "When My Yearning Found a Home",
+      "The Song of Fire and Ice",
+      "Fickle, Frail Heart",
+      "One Night of Bliss",
+      "Unquenched Fire",
+      "Poisoned Sanctuary"
+    ],
+    accent: "red",
+    navClass: "hover:text-red-400", 
+    bgClass: "bg-red-400"
+  },
+    {
+    id: "power",
+    title: "Feminine Power",
+    icon: Feather,
+    iconClass: "text-blue-400",
+    writingTitles: ["Feminine Power"],
+    accent: "blue",
+    navClass: "hover:text-blue-400", 
+    bgClass: "bg-blue-400"
+  },
+];
 
 function App() {
   return (
@@ -35,31 +117,24 @@ function App() {
         </div>
       </header>
 
-      {/* Navigation */}
+      {/* Navigation - Map from sections array */}
       <nav className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-center space-x-6 flex-wrap">
-            {[
-              { href: "#reflections", text: "Reflections", icon: BookOpen, hoverClass: "hover:text-emerald-400", bgClass: "bg-emerald-400" },
-              { href: "#love", text: "Love & Pain", icon: Heart, hoverClass: "hover:text-rose-400", bgClass: "bg-rose-400" },
-              { href: "#serendipity", text: "Serendipity", icon: Star, hoverClass: "hover:text-purple-400", bgClass: "bg-purple-400" },
-              { href: "#journey", text: "Inner Journeys", icon: Sparkles, hoverClass: "hover:text-amber-400", bgClass: "bg-amber-400" },
-              { href: "#desire", text: "Desire", icon: Fire, hoverClass: "hover:text-red-400", bgClass: "bg-red-400" },
-              { href: "#power", text: "Power", icon: Feather, hoverClass: "hover:text-blue-400", bgClass: "bg-blue-400" },
-            ].map((item) => (
+            {sections.map((item) => (
               <a 
-                key={item.href}
-                href={item.href} 
-                className={`relative flex items-center space-x-2 ${item.hoverClass} transition-colors my-1 group`}
+                key={item.id}
+                href={`#${item.id}`} 
+                className={`relative flex items-center space-x-2 ${item.navClass} transition-colors my-1 group`} 
               >
                 <item.icon size={18} />
-                <span>{item.text}</span>
+                <span>{item.title}</span>
                 <motion.div
                   className={`absolute bottom-[-2px] left-0 right-0 h-[2px] ${item.bgClass}`}
                   initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }}
+                  whileHover={{ scaleX: 1 }} 
                   transition={{ duration: 0.3, ease: "easeOut" }}
-                  style={{ transformOrigin: 'left' }}
+                  style={{ transformOrigin: 'left' }} 
                 />
               </a>
             ))}
@@ -67,70 +142,27 @@ function App() {
         </div>
       </nav>
 
-      {/* Content Sections */}
+      {/* Content Sections - Map from sections array */}
       <main className="max-w-4xl mx-auto px-4 py-16 space-y-32">
-        <WritingSection
-          id="reflections"
-          title="Reflections on Fiction"
-          icon={<BookOpen className="text-emerald-400" />}
-          writings={[writings.fictitiousDreams].filter(Boolean)}
-          accent="emerald"
-        />
+        {sections.map((section) => {
+          // Filter writings for the current section
+          const sectionWritings = allWritings.filter(w => 
+            w && section.writingTitles.includes(w.title || '') // Handle potentially undefined title
+          );
 
-        <WritingSection
-          id="love"
-          title="Love & Pain"
-          icon={<Heart className="text-rose-400" />}
-          writings={[writings.loveAndPain].filter(Boolean)}
-          accent="rose"
-        />
-
-        <WritingSection
-          id="serendipity"
-          title="Cosmic Serendipity"
-          icon={<Star className="text-purple-400" />}
-          writings={[writings.cosmicSerendipity, writings.morphedLove].filter(Boolean)}
-          accent="purple"
-        />
-
-        <WritingSection
-          id="journey"
-          title="Inner Journeys"
-          icon={<Sparkles className="text-amber-400" />}
-          writings={[
-            writings.ghostOfSpark,
-            writings.calmInStorm,
-            writings.loseToLove,
-            writings.redemption,
-            writings.loveAndPainWillCome,
-            writings.killingMyFlesh
-          ].filter(Boolean)}
-          accent="amber"
-        />
-
-        <WritingSection
-          id="desire"
-          title="Passion & Desire"
-          icon={<Fire className="text-red-400" />}
-          writings={[
-            writings.hellsFury,
-            writings.yearning,
-            writings.fireAndIce,
-            writings.fickleHeart,
-            writings.oneNight,
-            writings.unquenchedFire,
-            writings.poisonedSanctuary
-          ].filter(Boolean)}
-          accent="red"
-        />
-
-        <WritingSection
-          id="power"
-          title="Feminine Power"
-          icon={<Feather className="text-blue-400" />}
-          writings={[writings.femininePower].filter(Boolean)}
-          accent="blue"
-        />
+          return (
+            <WritingSection
+              key={section.id}
+              id={section.id}
+              title={section.title}
+              icon={<section.icon className={section.iconClass} />}
+              // Pass the correctly typed and filtered array
+              writings={sectionWritings}
+              // Assert the accent type
+              accent={section.accent as 'rose' | 'purple' | 'blue' | 'red' | 'amber' | 'emerald'}
+            />
+          );
+        })}
       </main>
 
       {/* Footer */}
