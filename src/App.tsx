@@ -73,7 +73,7 @@ function App() {
           id="reflections"
           title="Reflections on Fiction"
           icon={<BookOpen className="text-emerald-400" />}
-          writings={[writings.fictitiousDreams]}
+          writings={[writings.fictitiousDreams].filter(Boolean)}
           accent="emerald"
         />
 
@@ -81,7 +81,7 @@ function App() {
           id="love"
           title="Love & Pain"
           icon={<Heart className="text-rose-400" />}
-          writings={[writings.loveAndPain]}
+          writings={[writings.loveAndPain].filter(Boolean)}
           accent="rose"
         />
 
@@ -89,7 +89,7 @@ function App() {
           id="serendipity"
           title="Cosmic Serendipity"
           icon={<Star className="text-purple-400" />}
-          writings={[writings.cosmicSerendipity, writings.morphedLove]}
+          writings={[writings.cosmicSerendipity, writings.morphedLove].filter(Boolean)}
           accent="purple"
         />
 
@@ -104,7 +104,7 @@ function App() {
             writings.redemption,
             writings.loveAndPainWillCome,
             writings.killingMyFlesh
-          ]}
+          ].filter(Boolean)}
           accent="amber"
         />
 
@@ -120,7 +120,7 @@ function App() {
             writings.oneNight,
             writings.unquenchedFire,
             writings.poisonedSanctuary
-          ]}
+          ].filter(Boolean)}
           accent="red"
         />
 
@@ -128,7 +128,7 @@ function App() {
           id="power"
           title="Feminine Power"
           icon={<Feather className="text-blue-400" />}
-          writings={[writings.femininePower]}
+          writings={[writings.femininePower].filter(Boolean)}
           accent="blue"
         />
       </main>
