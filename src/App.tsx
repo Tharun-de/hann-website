@@ -40,22 +40,22 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-center space-x-6 flex-wrap">
             {[
-              { href: "#reflections", text: "Reflections", icon: BookOpen, color: "emerald" },
-              { href: "#love", text: "Love & Pain", icon: Heart, color: "rose" },
-              { href: "#serendipity", text: "Serendipity", icon: Star, color: "purple" },
-              { href: "#journey", text: "Inner Journeys", icon: Sparkles, color: "amber" },
-              { href: "#desire", text: "Desire", icon: Fire, color: "red" },
-              { href: "#power", text: "Power", icon: Feather, color: "blue" },
+              { href: "#reflections", text: "Reflections", icon: BookOpen, hoverClass: "hover:text-emerald-400", bgClass: "bg-emerald-400" },
+              { href: "#love", text: "Love & Pain", icon: Heart, hoverClass: "hover:text-rose-400", bgClass: "bg-rose-400" },
+              { href: "#serendipity", text: "Serendipity", icon: Star, hoverClass: "hover:text-purple-400", bgClass: "bg-purple-400" },
+              { href: "#journey", text: "Inner Journeys", icon: Sparkles, hoverClass: "hover:text-amber-400", bgClass: "bg-amber-400" },
+              { href: "#desire", text: "Desire", icon: Fire, hoverClass: "hover:text-red-400", bgClass: "bg-red-400" },
+              { href: "#power", text: "Power", icon: Feather, hoverClass: "hover:text-blue-400", bgClass: "bg-blue-400" },
             ].map((item) => (
               <a 
                 key={item.href}
                 href={item.href} 
-                className={`relative flex items-center space-x-2 hover:text-${item.color}-400 transition-colors my-1 group`}
+                className={`relative flex items-center space-x-2 ${item.hoverClass} transition-colors my-1 group`}
               >
                 <item.icon size={18} />
                 <span>{item.text}</span>
                 <motion.div
-                  className={`absolute bottom-[-2px] left-0 right-0 h-[2px] bg-${item.color}-400`}
+                  className={`absolute bottom-[-2px] left-0 right-0 h-[2px] ${item.bgClass}`}
                   initial={{ scaleX: 0 }}
                   whileHover={{ scaleX: 1 }}
                   transition={{ duration: 0.3, ease: "easeOut" }}
