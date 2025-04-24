@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Feather, Heart, Siren as Fire, Star, Sparkles, BookOpen } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { Feather, Heart, Siren as Fire, Star, Sparkles, BookOpen, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import WritingSection from './components/WritingSection';
 import { allWritings as importedWritings, WritingData } from './data/writings';
@@ -91,6 +91,8 @@ const sectionConfigs = [
 ];
 
 function App() {
+  // State for mobile menu visibility
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Group writings by their section ID for easier access
   const sectionsWithWritings = useMemo(() => {
@@ -126,6 +128,26 @@ function App() {
     // `scroll-behavior: smooth` handles the scrolling.
   };
 
+  // Function to handle clicks on links within the mobile menu
+  const handleMobileLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    setIsMobileMenuOpen(false); // Close the menu first
+    
+    const href = event.currentTarget.getAttribute('href');
+    if (href && href.startsWith('#')) {
+        const targetId = href.substring(1);
+        // Check if it's a poem ID by seeing if it exists in the original writings data
+        const isPoemLink = allWritings.some(w => w.id === targetId);
+        if (isPoemLink) {
+            // If it's a poem link, trigger the highlight effect
+            handlePoemLinkClick(event);
+        } else {
+             // If it's a section link, the smooth scroll handles it.
+             // We might need to manually scroll if smooth behavior isn't enough,
+             // but let's rely on CSS first.
+        }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
       {/* Hero Section */}
@@ -156,13 +178,17 @@ function App() {
         </div>
       </header>
 
-      {/* Navigation - Map from sections array */}
-      <nav className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50 py-4">
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Main Category Links with Dropdowns */}
-          <div className="flex items-center justify-center space-x-6 flex-wrap">
+      {/* Navigation Bar */}
+      <nav className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-40"> {/* Lower z-index than mobile menu */}
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"> {/* Fixed height and justify-between */} 
+          
+          {/* Logo/Title (Optional) - Could add one here */} 
+          <div className="text-lg font-semibold">Fictitious Scribbles</div>
+          
+          {/* Desktop Navigation (Hidden on Mobile) */}
+          <div className="hidden md:flex items-center justify-center space-x-6 flex-wrap">
             {sectionsWithWritings.map((section) => (
-              <div key={section.id} className="relative group my-1"> {/* Container for link + dropdown */}
+              <div key={section.id} className="relative group my-1"> 
                 {/* Main Category Link */}
                 <a 
                   href={`#${section.id}`} 
@@ -207,8 +233,74 @@ function App() {
               </div>
             ))}
           </div>
+
+          {/* Mobile Menu Button (Visible on Mobile) */}
+          <div className="md:hidden">
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              aria-label="Open main menu"
+            >
+              <Menu size={24} />
+            </button>
+          </div>
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay (Conditionally Rendered) */}
+      {isMobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: "-100%" }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: "-100%" }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="fixed inset-0 bg-gray-900/95 backdrop-blur-sm z-50 p-6 md:hidden overflow-y-auto" // High z-index, padding, hide on md+, scroll
+        >
+          {/* Close Button */}
+          <div className="flex justify-end mb-6">
+            <button 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              aria-label="Close main menu"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {/* Mobile Navigation Links */}
+          <nav className="flex flex-col space-y-6">
+            {sectionsWithWritings.map((section) => (
+              <div key={`${section.id}-mobile`}>
+                {/* Section Link */}
+                <a 
+                  href={`#${section.id}`}
+                  onClick={handleMobileLinkClick}
+                  className={`flex items-center space-x-3 p-2 rounded-md text-lg font-semibold ${section.navClass} transition-colors`}
+                >
+                  <section.icon size={20} />
+                  <span>{section.title}</span>
+                </a>
+                {/* Poem Links (If any) */}
+                {section.writings && section.writings.length > 0 && (
+                  <div className="mt-2 pl-8 space-y-2 border-l border-gray-700 ml-4">
+                    {section.writings.map((writing) => (
+                      <a 
+                        key={writing.id}
+                        href={`#${writing.id}`}
+                        onClick={handleMobileLinkClick}
+                        className={`block text-base text-gray-400 hover:text-gray-100 hover:${section.iconClass} transition-colors py-1`}
+                        title={writing.title}
+                      >
+                        {writing.title || 'Untitled'}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </nav>
+        </motion.div>
+      )}
 
       {/* Content Sections - Map from sections array */}
       <main className="max-w-4xl mx-auto px-4 py-16 space-y-32">
