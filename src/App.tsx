@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Feather, Heart, Siren as Fire, Star, Sparkles, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
 import WritingSection from './components/WritingSection';
@@ -7,14 +7,18 @@ import { allWritings as importedWritings, WritingData } from './data/writings';
 // Explicitly type the imported data
 const allWritings: WritingData[] = importedWritings;
 
-// Define section configurations using titles for filtering
-const sections = [
+// Define available accent colors (mirroring what was in WritingSection)
+const accentColorKeys = ['rose', 'purple', 'blue', 'red', 'amber', 'emerald'] as const;
+type AccentColor = typeof accentColorKeys[number];
+
+// Define section configurations
+const sectionConfigs = [
   {
     id: "reflections",
     title: "Reflections on Fiction",
     icon: BookOpen,
     iconClass: "text-emerald-400",
-    writingTitles: ["Fictitious Dreams"],
+    writingIds: ["fictitiousDreams"], // Use writing IDs
     accent: "emerald",
     navClass: "hover:text-emerald-400", 
     bgClass: "bg-emerald-400"
@@ -24,7 +28,7 @@ const sections = [
     title: "Love & Pain",
     icon: Heart,
     iconClass: "text-rose-400",
-    writingTitles: ["Love and Pain"],
+    writingIds: ["loveAndPain"], // Use writing IDs
     accent: "rose",
     navClass: "hover:text-rose-400", 
     bgClass: "bg-rose-400"
@@ -34,7 +38,7 @@ const sections = [
     title: "Cosmic Serendipity",
     icon: Star,
     iconClass: "text-purple-400",
-    writingTitles: ["Cosmic Serendipity", "Morphed Love"],
+    writingIds: ["cosmicSerendipity", "morphedLove"], // Use writing IDs
     accent: "purple",
     navClass: "hover:text-purple-400", 
     bgClass: "bg-purple-400"
@@ -44,13 +48,13 @@ const sections = [
     title: "Inner Journeys",
     icon: Sparkles,
     iconClass: "text-amber-400",
-    writingTitles: [
-      "Ghost of a Spark",
-      "The Calm in the Storm",
-      "Lose You to Love Me",
-      "Redemption from Reverie",
-      "Love Will Come and So Will Pain",
-      "Killing My Flesh"
+    writingIds: [ // Use writing IDs
+      "ghostOfSpark",
+      "calmInStorm",
+      "loseToLove",
+      "redemption",
+      "loveAndPainWillCome",
+      "killingMyFlesh"
     ],
     accent: "amber",
     navClass: "hover:text-amber-400", 
@@ -61,14 +65,14 @@ const sections = [
     title: "Passion & Desire",
     icon: Fire,
     iconClass: "text-red-400",
-    writingTitles: [
-      "Hell's Fury",
-      "When My Yearning Found a Home",
-      "The Song of Fire and Ice",
-      "Fickle, Frail Heart",
-      "One Night of Bliss",
-      "Unquenched Fire",
-      "Poisoned Sanctuary"
+    writingIds: [ // Use writing IDs
+      "hellsFury",
+      "yearning",
+      "fireAndIce",
+      "fickleHeart",
+      "oneNight",
+      "unquenchedFire",
+      "poisonedSanctuary"
     ],
     accent: "red",
     navClass: "hover:text-red-400", 
@@ -79,7 +83,7 @@ const sections = [
     title: "Feminine Power",
     icon: Feather,
     iconClass: "text-blue-400",
-    writingTitles: ["Feminine Power"],
+    writingIds: ["femininePower"], // Use writing IDs
     accent: "blue",
     navClass: "hover:text-blue-400", 
     bgClass: "bg-blue-400"
@@ -87,6 +91,41 @@ const sections = [
 ];
 
 function App() {
+
+  // Group writings by their section ID for easier access
+  const sectionsWithWritings = useMemo(() => {
+    const writingsById = allWritings.reduce((acc, writing) => {
+      acc[writing.id] = writing;
+      return acc;
+    }, {} as Record<string, WritingData>);
+
+    return sectionConfigs.map(config => ({
+      ...config,
+      writings: config.writingIds.map(id => writingsById[id]).filter(w => w) // Map IDs to WritingData objects
+    }));
+  }, []);
+
+  // Function to handle poem link clicks and apply highlight
+  const handlePoemLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    const href = event.currentTarget.getAttribute('href');
+    if (!href || !href.startsWith('#')) return;
+    
+    const targetId = href.substring(1);
+    const targetElement = document.getElementById(targetId);
+
+    if (targetElement) {
+      targetElement.classList.add('highlight-scroll-target');
+      
+      // Remove the highlight class after a short duration
+      setTimeout(() => {
+        targetElement.classList.remove('highlight-scroll-target');
+      }, 1500); // Highlight duration: 1.5 seconds
+    }
+    
+    // Note: We don't prevent default behavior here because 
+    // `scroll-behavior: smooth` handles the scrolling.
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200">
       {/* Hero Section */}
@@ -118,25 +157,54 @@ function App() {
       </header>
 
       {/* Navigation - Map from sections array */}
-      <nav className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <nav className="sticky top-0 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50 py-4">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Main Category Links with Dropdowns */}
           <div className="flex items-center justify-center space-x-6 flex-wrap">
-            {sections.map((item) => (
-              <a 
-                key={item.id}
-                href={`#${item.id}`} 
-                className={`relative flex items-center space-x-2 ${item.navClass} transition-colors my-1 group`} 
-              >
-                <item.icon size={18} />
-                <span>{item.title}</span>
-                <motion.div
-                  className={`absolute bottom-[-2px] left-0 right-0 h-[2px] ${item.bgClass}`}
-                  initial={{ scaleX: 0 }}
-                  whileHover={{ scaleX: 1 }} 
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  style={{ transformOrigin: 'left' }} 
-                />
-              </a>
+            {sectionsWithWritings.map((section) => (
+              <div key={section.id} className="relative group my-1"> {/* Container for link + dropdown */}
+                {/* Main Category Link */}
+                <a 
+                  href={`#${section.id}`} 
+                  className={`relative flex items-center space-x-2 ${section.navClass} transition-colors pb-1`} 
+                >
+                  <section.icon size={18} />
+                  <span>{section.title}</span>
+                  {/* Underline animation */}
+                  <motion.div
+                    className={`absolute bottom-[-2px] left-0 right-0 h-[2px] ${section.bgClass}`}
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }} 
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    style={{ transformOrigin: 'left' }} 
+                  />
+                </a>
+                
+                {/* Poem Sub-links Dropdown (only if poems exist) */}
+                {section.writings && section.writings.length > 0 && (
+                  <div 
+                    className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-max max-w-xs p-3 
+                               bg-gray-800/90 backdrop-blur-sm rounded-md shadow-lg 
+                               opacity-0 invisible group-hover:opacity-100 group-hover:visible 
+                               transition-all duration-200 ease-out scale-95 group-hover:scale-100
+                               transform-gpu origin-top z-50" // Ensure dropdown is on top
+                  >
+                    <div className="flex flex-col space-y-2">
+                      {section.writings.map((writing) => (
+                        <a 
+                          key={writing.id}
+                          href={`#${writing.id}`} // Link to the poem's ID
+                          onClick={handlePoemLinkClick} // <-- Add the click handler here
+                          className={`block text-sm text-gray-300 hover:text-white hover:${section.iconClass} transition-colors whitespace-nowrap`}
+                          title={writing.title} // Add tooltip
+                        >
+                          {writing.title || 'Untitled'} {/* Display poem title */}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>
@@ -144,22 +212,15 @@ function App() {
 
       {/* Content Sections - Map from sections array */}
       <main className="max-w-4xl mx-auto px-4 py-16 space-y-32">
-        {sections.map((section) => {
-          // Filter writings for the current section
-          const sectionWritings = allWritings.filter(w => 
-            w && section.writingTitles.includes(w.title || '') // Handle potentially undefined title
-          );
-
+        {sectionsWithWritings.map((section) => { // Use the processed sections data
           return (
             <WritingSection
               key={section.id}
-              id={section.id}
+              id={section.id} // Section ID
               title={section.title}
               icon={<section.icon className={section.iconClass} />}
-              // Pass the correctly typed and filtered array
-              writings={sectionWritings}
-              // Assert the accent type
-              accent={section.accent as 'rose' | 'purple' | 'blue' | 'red' | 'amber' | 'emerald'}
+              writings={section.writings} // Pass the pre-filtered writings
+              accent={section.accent as AccentColor} // Keep type assertion or refine if needed
             />
           );
         })}

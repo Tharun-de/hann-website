@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 interface Writing {
   title?: string;
   content: string;
+  id?: string;
 }
 
 const accentColors = {
@@ -83,6 +84,7 @@ function WritingSection({ id, title, icon, writings, accent }: WritingSectionPro
           return (
             <motion.article
               key={index}
+              id={writing.id}
               className={`p-8 rounded-lg border ${accentColors[accent]} backdrop-blur-sm overflow-hidden`}
               custom={index} 
               initial="hidden"
