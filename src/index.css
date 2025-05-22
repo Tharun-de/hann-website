@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Add styles for highlighting the scrolled-to section */
+@layer components {
+  .highlight-scroll-target {
+    @apply ring-2 ring-offset-4 ring-offset-gray-900 ring-amber-300 transition-all duration-1000 ease-out;
+  }
+}
+
+/* Ensure smooth scrolling */
 html {
   scroll-behavior: smooth;
 }

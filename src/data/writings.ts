@@ -2,6 +2,10 @@ export interface WritingData {
   id: string;
   title?: string; // title is optional as seen in some original data, keep it optional
   content: string;
+  sectionId?: string; // Add sectionId as optional
+  mood?: string;      // Added from AdminPage.Writing
+  date?: string;      // Added from AdminPage.Writing
+  likes?: number;     // Added from AdminPage.Writing
 }
 
 // Export an array instead of an object
